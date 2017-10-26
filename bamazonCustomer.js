@@ -5,21 +5,30 @@ var inquirer = require("inquirer");
 var connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
-
-  // Your username
   user: "root",
-
-  // Your password
   password: "",
   database: "bamazonDB"
 });
 
-
+connection.connect(function(err){
+  if (err) throw err;
+  console.log("connected as id " + connection.threadId+ "\n");
+  //displayItems();
+  initialPrompt();
+});
 
 function displayItems(){
-
-	//show ids, names, and prices 
+  console.log("Displaying all items available...\n");
+  connection.query("SELECT * FROM products", function (err, res){
+    if (err) throw err;
+    for(i = 0; i < res.length; i++){
+      console.log("(Id# " + res[i].item_id + ") " + res[i].product_name + " $" + res[i].price);
+    }
+    endConnection();
+  });
 }
+
+
 
 //ask them the ID of the product they would like to buy.
 //and ask how many units of the product they would like to buy.
@@ -33,13 +42,17 @@ function displayItems(){
 //when order goes through, show customer total cost of their purchase
 
 
+
 function initialPrompt() {
   inquirer
     .prompt({
-      name: "postOrBid",
-      type: "rawlist",
-      message: "Would you like to [POST] an auction or [BID] on an auction?",
-      choices: ["POST", "BID"]
+      name: "id",
+      type: "input",
+      message: "Enter the ID # (just the number) of the product you would like to buy"
+    },{
+      name: "quantity",
+      type: "input",
+      message: "How many would you like of this product?"
     })
     .then(function(answer) {
       // based on their answer, either call the bid or the post functions
@@ -50,4 +63,9 @@ function initialPrompt() {
         bidAuction();
       }
     });
+}
+
+
+function endConnection(){
+  connection.end();
 }
