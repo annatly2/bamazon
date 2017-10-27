@@ -14,49 +14,38 @@ var connection = mysql.createConnection({
 connection.connect(function(err){
   if (err) throw err;
   console.log("connected as id " + connection.threadId+ "\n");
-  //displayItems();
   initialPrompt();
 });
 
-//ask them the ID of the product they would like to buy.
-//and ask how many units of the product they would like to buy.
-
-//check if store has enough of product
-
-//if not-> prompt insufficient quantity
-
-// if so -> fulfill customer's orders
-	//updating sql database to reflect remaining quantity
-//when order goes through, show customer total cost of their purchase
-//thank you for your purchase
-
-
-
 function initialPrompt() {
-
   console.log("Displaying all items available...\n");
   connection.query("SELECT * FROM products", function (err, res){
 
     if (err) throw err;
 
+    var productID;
+    var productName;
+    var productPrice;
+    var productQuantity;
+
     for(i = 0; i < res.length; i++){
-      var productID = res[i].item_id;
-      var productName = res[i].product_name;
-      var productPrice = res[i].price;
-      console.log("\n(Id# " + productID+ ") " + productName+ " $" + productPrice);
+      productID = res[i].item_id;
+      productName = res[i].product_name;
+      productPrice = res[i].price;
+      productQuantity = res[i].stock_quantity;
+      console.log("\n(ID# " + productID+ ") " + productName+ " $" + productPrice);
     }
-    //endConnection();
 
   inquirer
     .prompt([
       {
         type: "input",
-        message: "Enter the ID # (1 through 10) of the product you would like to buy".magenta,
+        message: "Enter the ID # (1 through 10) of the product you would like to buy".magenta.bold,
         name: "id"
       },
       {
         type: "input",
-        message: "How many would you like to buy?".magenta,
+        message: "How many would you like to buy?".magenta.bold,
         name: "unit"
       }
     ])
@@ -65,42 +54,59 @@ function initialPrompt() {
       var unitWanted = answer.unit;
       var newIndex = parseInt(idWanted - 1);
 
-      console.log("Id" + idWanted);
-      console.log("Unit: "+ unitWanted);
+      var productWanted = res[newIndex].product_name;
+      productQuantity = res[newIndex].stock_quantity;
+      var updatedStock = productQuantity - unitWanted;
+      var totalPrice = res[newIndex].price*unitWanted;
 
-      console.log(res[newIndex].item_id);
-      console.log(res[newIndex].product_name);
+      console.log("Give us a moment to check if your item (" + productWanted + ") is available...");
+      console.log("Current Supply: " + productQuantity);
+      console.log("Customer would like to buy: " +unitWanted);
 
-
-
-    //assign this id to an id from the mysql list
-      
+      if (unitWanted <= parseInt(productQuantity)){
+        connection.query(
+          "UPDATE products SET ? WHERE ?",
+          [
+            {
+              stock_quantity: updatedStock
+            },
+            {
+              product_name: productWanted
+            }
+          ], function(error){
+              if (error) throw error;
+              console.log("You have successfully made a purchase!".green.bold);
+              console.log("The total costs is".cyan.bold + " $" + totalPrice);
+              console.log("Thanks for shopping at our store. We'll see you next time!".green.bold);
+              endConnection();
+          })
+      }else if(unitWanted > parseInt(productQuantity) && parseInt(productQuantity) > 0){
+          connection.query(
+          "UPDATE products SET ? WHERE ?",
+          [
+            {
+              stock_quantity: 0
+            },
+            {
+              product_name: productWanted
+            }
+          ], function(error){
+              if (error) throw error;
+              totalPrice = res[newIndex].price*productQuantity;
+              console.log("We do not have that many available. You can purchase " + productQuantity);
+              console.log("You have successfully made a purchase!".green.bold);
+              console.log("The total costs is".cyan.bold + " $" + totalPrice);
+              console.log("Come back another time to see if we've restocked");
+              endConnection();
+          })
+      }else if(parseInt(productQuantity) === 0){
+          console.log("Sorry, we are ALL SOLD OUT of that item! Please make another purchase below.".red.bold);
+          initialPrompt();
+      }
     });
 
   });
 }
-
-function checkIfAvailable(){
-    connection.query("SELECT * FROM products", function (err, res){
-
-    if (err) throw err;
-
-    console.log("checking" +res[newIndex].product_name);
-
-
-
-  //   for(i = 0; i < res.length; i++){
-  //     var productID = res[i].item_id;
-  //     var productName = res[i].product_name;
-  //     var productPrice = res[i].price;
-  //     console.log("\n(Id# " + productID+ ") " + productName+ " $" + productPrice);
-  //   }
-
-  // console.log()
-
-}
-}
-
 
 function endConnection(){
   connection.end();
