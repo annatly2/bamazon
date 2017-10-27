@@ -109,11 +109,11 @@ function placeOrder(quantity, productWanted, totalPrice, productQuantity, availa
               if (error) throw error;
               if(available === false){
                 console.log("We do not have that many available. You can purchase " + productQuantity);
-                console.log("The total costs is".cyan.bold + " $" + totalPrice);
+                console.log("The total is".cyan.bold + " $" + totalPrice);
                 console.log("Come back another time to buy the rest when we've restocked.");
               }else{
                 console.log("You have successfully made a purchase!".green.bold);
-                console.log("The total costs is".cyan.bold + " $" + totalPrice);
+                console.log("The total is".cyan.bold + " $" + totalPrice);
               }
               endConnection();
           })
