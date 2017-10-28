@@ -2,7 +2,7 @@
 
 Bamazon is an Amazon-like storefront operating on the command line using node and MySQL.  This app takes in orders from customers and depletes stock from the store's inventory. Customers are able to purchase one type of item at a time.
 
-##To get started...
+## To get started...
 
 1. Clone this git repository. 
 
@@ -14,7 +14,7 @@ Bamazon is an Amazon-like storefront operating on the command line using node an
 
 Once you have completed the steps above, type `node bamazonCustomer.js` to start having fun with Bamazon!  The app will prompt you for user input when necessary.
 
-###Below are screenshots of how the app works.  :octocat: 
+### Below are screenshots of how the app works.  :octocat: 
 
 **1. Initial database**
 
