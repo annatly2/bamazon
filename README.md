@@ -19,7 +19,8 @@ Below are screenshots of how the app works.
 
 1. Initial database
 
-[[/images/1.png|initial database]]
+
+![initial](https://github.com/annatly2/bamazon/images/1.png)
 
 2. Type node bamazonCustomer.js in command line
 
