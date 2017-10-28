@@ -83,7 +83,7 @@ function initialPrompt() {
       }else if(unitWanted > parseInt(productQuantity) && parseInt(productQuantity) > 0){
           placeOrder(0, productWanted, totalPrice, productQuantity, false);
 
-      //is there are none in stock
+      //if there are none in stock
       }else if(parseInt(productQuantity) === 0){
           console.log("Sorry, we are ALL SOLD OUT of that item! Please make another purchase below.".red.bold);
           initialPrompt();

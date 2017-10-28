@@ -14,29 +14,39 @@ To get started...
 
 Once you have completed the steps above, type `node bamazonCustomer.js` to start having fun with Bamazon!  The app will prompt you for user input when necessary.
 
-Below are screenshots of how the app works.
-
+Below are screenshots of how the app works.  :octocat: 
 
 1. Initial database
-
 
 ![initial](/images/1.png)
 
 2. Type node bamazonCustomer.js in command line
 
+![CLI](/images/2.png)
+
 3. Type in id of product
 
+![id-product](/images/3.png)
+
 4. Type in amount of product
+![amount-products](/images/4.png)
 
 5. Before purchase - database unchanged
+![before-purchase](/images/5.png)
 
 6. After puchase - database is changed
+![after-purchase](/images/6.png)
 
 7. Buying more than what is available (at least 1 of the item is in stock)
+![more-than-available](/images/7.png)
 
 8. Buying more than what is available - sql database changes
 
+![more-than-available-sql-change](/images/8.png)
+
 9. Buying something that is not in stock
+![not-in-stock](/images/9.png)
 
 10. Buying something that is not in stock (continued)
+![not-in-stock-continued](/images/10.png)
 
